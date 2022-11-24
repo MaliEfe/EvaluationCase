@@ -1,0 +1,121 @@
+﻿1- Kampanya Eklenmesi 
+
+POST: https://localhost:44319/api/campaign
+REQUEST BODY: {
+     "Name":"apple-cep-telefonlarinda-13-indirim",
+     "IsActive":true,
+     "MinimumBasketPrice":0,
+     "Discount":13,
+     "CampaignType":1,
+     "DiscountType":1,
+     "CampaignTypeValue" : ["Apple"],
+     "AffectedCount":9999,
+     "StartDate":"2022-11-19",
+     "EndDate":"2022-12-25"
+}
+RESPONSE BODY:{
+    "value": "a7fc18e7-6672-4137-8668-33e7781e09c0",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+---------------------------------------------------------------------------------------
+
+2- Ürünlerin Eklenmesi
+
+POST: https://localhost:44319/api/product
+
+Ürün -1:
+REQUEST BODY:{
+                "Name": "IPhone11",
+                "Code" : "IPhone11_1",
+                "Brand" : "Apple",
+                "CategoryId": 1,
+                "CategoryName": "Telefon",
+                "Price": 9000
+}
+RESPONSE BODY:{
+    "value": "15d35b47-0f1b-4628-8371-814c1891b091",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+Ürün -2:
+REQUEST BODY:{
+                "Name": "SamsungSE",
+                "Code" : "SamsungSE_1",
+                "Brand" : "Samsung",
+                "CategoryId": 1,
+                "CategoryName": "Telefon",
+                "Price": 5000
+}
+RESPONSE BODY:{
+    "value": "7ad9d329-1ea1-428c-9c6b-5990227750b4",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+------------------------------------------------------------------------------
+
+3- Ürünlerin Sepete Eklenmesi
+
+POST: https://localhost:44319/api/basket
+
+REQUEST BODY:{
+    "BasketItems": [
+        {
+            "ProductId": "15d35b47-0f1b-4628-8371-814c1891b091",
+            "Quantity": 1
+        },
+        {
+            "ProductId": "7ad9d329-1ea1-428c-9c6b-5990227750b4",
+            "Quantity":1
+        }
+    ]
+}
+RESPONSE BODY:{
+    "value": "a6bede79-5dbc-4e1d-9e9a-4ef8c7c7f1b5",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+---------------------------------------------------------------------------------
+
+4-Kampanya Hesaplama
+
+POST: https://localhost:44319/api/campaign/campaign-evaluate
+
+REQUEST BODY:{
+    "BasketId":"a6bede79-5dbc-4e1d-9e9a-4ef8c7c7f1b5"
+    }
+
+RESPONSE BODY:{
+    "value": {
+        "items": [
+            {
+                "productCode": "IPhone11_1",
+                "price": 9000,
+                "discount": {
+                    "discountPrice": 1170,
+                    "campaignId": "b68e0990-4e98-4b45-9f11-75452cd4c473",
+                    "discountedPrice": 7830
+                }
+            },
+            {
+                "productCode": "SamsungSE_1",
+                "price": 5000,
+                "discount": {
+                    "discountPrice": 0,
+                    "campaignId": null,
+                    "discountedPrice": 5000
+                }
+            }
+        ],
+        "totalDiscountedPrice": 12830
+    },
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}

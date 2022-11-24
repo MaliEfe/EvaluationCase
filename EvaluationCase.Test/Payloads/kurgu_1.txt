@@ -1,0 +1,150 @@
+﻿1- Kampanya Eklenmesi 
+
+POST: https://localhost:44319/api/campaign
+REQUEST BODY: {
+     "Name":"250-TL-üzerine-ev-dekorasyon-kategorisinde-25-indirim",
+     "IsActive":true,
+     "MinimumBasketPrice":250,
+     "Discount":25,
+     "CampaignType":2,
+     "DiscountType":1,
+     "CampaignTypeValue" : ["Ev Dekorasyonu"],
+     "AffectedCount":9999,
+     "StartDate":"2022-11-19",
+     "EndDate":"2022-12-25"
+}
+RESPONSE BODY:{
+    "value": "3a9a4b35-9d18-4a11-b968-c46452b2cac8",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+---------------------------------------------------------------------------------------
+
+2- Ürünlerin Eklenmesi
+
+POST: https://localhost:44319/api/product
+
+Ürün -1:
+REQUEST BODY:{
+                "Name": "Halı",
+                "Code" : "Carpet_1",
+                "Brand" : "Carpet",
+                "CategoryId": 2,
+                "CategoryName": "Ev Dekorasyonu",
+                "Price": 250
+}
+RESPONSE BODY:{
+    "value": "5bb47df7-1559-4311-a8c3-a304b4a70e28",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+Ürün -2:
+REQUEST BODY:{
+                "Name": "Samsung Telefon",
+                "Code" : "Sehpa_1",
+                "Brand" : "Samsung",
+                "CategoryId": 1,
+                "CategoryName": "Telefon",
+                "Price": 1000
+}
+RESPONSE BODY:{
+    "value": "f6206b1f-0b87-4923-a6cf-15ad0be4a2a3",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+Ürün -3:
+REQUEST BODY:{
+                "Name": "Sehpa",
+                "Code" : "Sehpa_1",
+                "Brand" : "Table",
+                "CategoryId": 2,
+                "CategoryName": "Ev Dekorasyonu",
+                "Price": 400
+}
+RESPONSE BODY:{
+    "value": "8d251b4a-7191-4132-a9ee-a358cf60eac4",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+------------------------------------------------------------------------------
+
+3- Ürünlerin Sepete Eklenmesi
+
+POST: https://localhost:44319/api/basket
+
+REQUEST BODY:{
+    "BasketItems": [
+        {
+            "ProductId": "5bb47df7-1559-4311-a8c3-a304b4a70e28",
+            "Quantity": 1
+        },
+        {
+            "ProductId": "f6206b1f-0b87-4923-a6cf-15ad0be4a2a3",
+            "Quantity":1
+        },
+        {
+            "ProductId": "8d251b4a-7191-4132-a9ee-a358cf60eac4",
+            "Quantity":2
+        }
+    ]
+}
+RESPONSE BODY:{
+    "value": "09e7ee38-8be8-46ac-af50-f7233f5b8ac8",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+---------------------------------------------------------------------------------
+
+4-Kampanya Hesaplama
+
+POST: https://localhost:44319/api/campaign/campaign-evaluate
+
+REQUEST BODY:{
+    "BasketId":"09e7ee38-8be8-46ac-af50-f7233f5b8ac8"
+    }
+
+RESPONSE BODY:{
+    "value": {
+        "items": [
+            {
+                "productCode": "Carpet_1",
+                "price": 250,
+                "discount": {
+                    "discountPrice": 62.5,
+                    "campaignId": "34c4a3ff-e8e0-4a0c-8840-d96d112842c8",
+                    "discountedPrice": 187.5
+                }
+            },
+            {
+                "productCode": "Sehpa_1",
+                "price": 1000,
+                "discount": {
+                    "discountPrice": 0,
+                    "campaignId": null,
+                    "discountedPrice": 1000
+                }
+            },
+            {
+                "productCode": "Sehpa_1",
+                "price": 800,
+                "discount": {
+                    "discountPrice": 200,
+                    "campaignId": "34c4a3ff-e8e0-4a0c-8840-d96d112842c8",
+                    "discountedPrice": 600
+                }
+            }
+        ],
+        "totalDiscountedPrice": 1787.5
+    },
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}

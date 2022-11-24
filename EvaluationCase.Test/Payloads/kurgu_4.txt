@@ -1,0 +1,152 @@
+﻿1- Kampanya Eklenmesi 
+
+POST: https://localhost:44319/api/campaign
+REQUEST BODY: {
+     "Name":"samsung-kulaklik-hediye",
+     "IsActive":true,
+     "MinimumBasketPrice":2000,
+     "Discount":100,
+     "CampaignType":0,
+     "DiscountType":1,
+     "CampaignTypeValue" : ["elektronik"],
+     "AffectedCount":1,
+     "StartDate":"2022-11-19",
+     "EndDate":"2022-12-25"
+}
+RESPONSE BODY:{
+    "value": "03a334d1-e539-4375-ac52-6e014c5e0872",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+---------------------------------------------------------------------------------------
+
+2- Ürünlerin Eklenmesi
+
+POST: https://localhost:44319/api/product
+
+Ürün -1:
+REQUEST BODY:{
+                "Name": "Samsung HS-1",
+                "Code" : "Samsung_1",
+                "Brand" : "Samsung",
+                "CategoryId": 4,
+                "CategoryName": "Kulaklık",
+                "ProductGroupCodes":["elektronik"],
+                "Price": 60
+}
+RESPONSE BODY:{
+    "value": "29f76822-c3a2-4bbe-bc8c-90a4ab8efecf",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+Ürün -2:
+REQUEST BODY:{
+                "Name": "Samsung HS-2",
+                "Code" : "Samsung_2",
+                "Brand" : "Samsung",
+                "CategoryId": 4,
+                "CategoryName": "Kulaklık",
+                "ProductGroupCodes":["elektronik"],
+                "Price": 100
+}
+RESPONSE BODY:{
+    "value": "cdcd7fc2-408f-47ba-b1ba-38549b6ed4bd",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+Ürün -3:
+REQUEST BODY:{
+                "Name": "HardDisk",
+                "Code" : "HardDisk_1",
+                "Brand" : "Hp",
+                "CategoryId": 4,
+                "CategoryName": "Bilgisayar",
+                "ProductGroupCodes":["elektronik"],
+                "Price": 1700
+}
+RESPONSE BODY:{
+    "value": "c701f53e-5556-46fb-be3a-1ab4e16b39a9",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+------------------------------------------------------------------------------
+
+3- Ürünlerin Sepete Eklenmesi
+
+POST: https://localhost:44319/api/basket
+
+REQUEST BODY:{
+    "BasketItems": [
+        {
+            "ProductId": "29f76822-c3a2-4bbe-bc8c-90a4ab8efecf",
+            "Quantity": 1
+        },
+        {
+            "ProductId": "cdcd7fc2-408f-47ba-b1ba-38549b6ed4bd",
+            "Quantity":1
+        },
+        {
+            "ProductId": "c701f53e-5556-46fb-be3a-1ab4e16b39a9",
+            "Quantity":1
+        }
+    ]
+}
+RESPONSE BODY:{
+    "value": "d508e911-0ab9-4058-9dd4-aa5cd89b04fc",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+---------------------------------------------------------------------------------
+
+4-Kampanya Hesaplama
+
+POST: https://localhost:44319/api/campaign/campaign-evaluate
+
+REQUEST BODY:{
+    "BasketId":"d508e911-0ab9-4058-9dd4-aa5cd89b04fc"
+    }
+
+RESPONSE BODY:{
+    "value": {
+        "items": [
+            {
+                "productCode": "Samsung_1",
+                "price": 60,
+                "discount": {
+                    "discountPrice": 0,
+                    "campaignId": null,
+                    "discountedPrice": 60
+                }
+            },
+            {
+                "productCode": "Samsung_2",
+                "price": 100,
+                "discount": {
+                    "discountPrice": 0,
+                    "campaignId": null,
+                    "discountedPrice": 100
+                }
+            },
+            {
+                "productCode": "HardDisk_1",
+                "price": 1700,
+                "discount": {
+                    "discountPrice": 0,
+                    "campaignId": null,
+                    "discountedPrice": 1700
+                }
+            }
+        ],
+        "totalDiscountedPrice": 1860
+    },
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}

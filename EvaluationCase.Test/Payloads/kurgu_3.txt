@@ -1,0 +1,153 @@
+﻿1- Kampanya Eklenmesi 
+
+POST: https://localhost:44319/api/campaign
+REQUEST BODY: {
+     "Name":"kedimamasi-sepette-50-tl-indirim",
+     "IsActive":true,
+     "MinimumBasketPrice":300,
+     "Discount":50,
+     "CampaignType":0,
+     "DiscountType":0,
+     "CampaignTypeValue" : ["kedimamasi-sepette-50-tl-indirim"],
+     "AffectedCount":9999,
+     "StartDate":"2022-11-19",
+     "EndDate":"2022-12-25"
+}
+RESPONSE BODY:{
+    "value": "c8996bad-cd2c-49d1-90c8-878ce4efb216",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+---------------------------------------------------------------------------------------
+
+2- Ürünlerin Eklenmesi
+
+POST: https://localhost:44319/api/product
+
+Ürün -1:
+REQUEST BODY:{
+                "Name": "Whiskas Mama",
+                "Code" : "Whiskas_1",
+                "Brand" : "Whiskas",
+                "CategoryId": 3,
+                "CategoryName": "Kedi Maması",
+                "ProductGroupCodes":["kedimamasi-sepette-50-tl-indirim"],
+                "Price": 350
+}
+RESPONSE BODY:{
+    "value": "40e48526-94e0-4e5f-a02b-208da681b557",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+Ürün -2:
+REQUEST BODY:{
+                "Name": "Proline Mama",
+                "Code" : "Proline_1",
+                "Brand" : "Proline",
+                "CategoryId": 3,
+                "CategoryName": "Kedi Maması",
+                "ProductGroupCodes":["kedimamasi-haftasonu-indirim"],
+                "Price": 500
+}
+RESPONSE BODY:{
+    "value": "6f4118d8-aee5-42c6-94d5-2042de217280",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+Ürün -3:
+REQUEST BODY:{
+                "Name": "Fix Mama",
+                "Code" : "Fix_1",
+                "Brand" : "Fix",
+                "CategoryId": 3,
+                "CategoryName": "Kedi Maması",
+                "ProductGroupCodes":["kedimamasi-sepette-50-tl-indirim"],
+                "Price": 200
+}
+RESPONSE BODY:{
+    "value": "751321c0-4b70-460d-a7ac-3f8813029350",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+
+------------------------------------------------------------------------------
+
+3- Ürünlerin Sepete Eklenmesi
+
+POST: https://localhost:44319/api/basket
+
+REQUEST BODY:{
+    "BasketItems": [
+        {
+            "ProductId": "751321c0-4b70-460d-a7ac-3f8813029350",
+            "Quantity": 1
+        },
+        {
+            "ProductId": "6f4118d8-aee5-42c6-94d5-2042de217280",
+            "Quantity":1
+        },
+        {
+            "ProductId": "40e48526-94e0-4e5f-a02b-208da681b557",
+            "Quantity":1
+        }
+    ]
+}
+RESPONSE BODY:{
+    "value": "24383d65-b814-4a3e-acb9-70915fac8da8",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
+---------------------------------------------------------------------------------
+
+4-Kampanya Hesaplama
+
+POST: https://localhost:44319/api/campaign/campaign-evaluate
+
+REQUEST BODY:{
+    "BasketId":"24383d65-b814-4a3e-acb9-70915fac8da8"
+    }
+
+RESPONSE BODY:{
+    "value": {
+        "items": [
+            {
+                "productCode": "Fix_1",
+                "price": 200,
+                "discount": {
+                    "discountPrice": 25,
+                    "campaignId": "5f256232-13fb-4f98-8f60-edf5414b79d1",
+                    "discountedPrice": 175
+                }
+            },
+            {
+                "productCode": "Proline_1",
+                "price": 500,
+                "discount": {
+                    "discountPrice": 0,
+                    "campaignId": null,
+                    "discountedPrice": 500
+                }
+            },
+            {
+                "productCode": "Whiskas_1",
+                "price": 350,
+                "discount": {
+                    "discountPrice": 25,
+                    "campaignId": "5f256232-13fb-4f98-8f60-edf5414b79d1",
+                    "discountedPrice": 325
+                }
+            }
+        ],
+        "totalDiscountedPrice": 1000
+    },
+    "id": "00000000-0000-0000-0000-000000000000",
+    "message": null,
+    "isSuccess": true
+}
