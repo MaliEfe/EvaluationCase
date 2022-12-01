@@ -10,32 +10,10 @@ using System.Threading.Tasks;
 
 namespace EvaluationCase.Persistence.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-
-        public ProductRepository(ApplicationDbContext dbContext)
+        public ProductRepository(IMongoDBContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
-        }
-
-        public async Task<Product> CreateAsync(Product product)
-        {
-            product.CreateDate = DateTime.UtcNow;
-            await _dbContext.Products.InsertOneAsync(product);
-
-            return product;
-        }
-
-        public async Task<List<Product>> GetAllAsync() =>
-            await _dbContext.Products.Find(Builders<Product>.Filter.Empty).ToListAsync();
-
-        public async Task<Product> GetByIdAsync(Guid id) =>
-            await _dbContext.Products.Find(Builders<Product>.Filter.Eq(p => p.Id, id)).FirstOrDefaultAsync();
-
-        public async Task<Product> UpdateAsync(Product entity)
-        {
-            return await _dbContext.Products.FindOneAndReplaceAsync<Product>(Builders<Product>.Filter.Eq(c => c.Id, entity.Id), entity);
         }
     }
 }

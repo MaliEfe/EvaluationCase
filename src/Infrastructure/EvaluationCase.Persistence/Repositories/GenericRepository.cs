@@ -6,33 +6,41 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Driver;
+using EvaluationCase.Domain.Entities;
+using SharpCompress.Common;
 
 namespace EvaluationCase.Persistence.Repositories
 {
-    public class GenericRepository<T> //: IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        private readonly ApplicationDbContext dbContext;
+        protected readonly IMongoDBContext _mongoContext;
+        protected IMongoCollection<T> _dbCollection;
 
-        public GenericRepository(ApplicationDbContext dbContext)
+        public GenericRepository(IMongoDBContext dbContext)
         {
-            this.dbContext = dbContext;
+            _mongoContext = dbContext;
+            _dbCollection = _mongoContext.GetCollection<T>(typeof(T).Name);
         }
 
-        //public async Task<T> AddAsync(T entity)
-        //{
-        //    await dbContext.Set<T>().AddAsync(entity);
-        //    await dbContext.SaveChangesAsync();
-        //    return entity;
-        //}
 
-        //public async Task<List<T>> GetAll()
-        //{
-        //    return await dbContext.Set<T>().ToListAsync();
-        //}
+        public async Task<T> CreateAsync(T entity)
+        {
+            entity.CreateDate = DateTime.UtcNow;
+            await _dbCollection.InsertOneAsync(entity);
 
-        //public async Task<T> GetById(Guid id)
-        //{
-        //    return await dbContext.Set<T>().FindAsync(id);
-        //}
+            return entity;
+        }
+
+        public async Task<List<T>> GetAllAsync() =>
+            await _dbCollection.Find(Builders<T>.Filter.Empty).ToListAsync();
+
+
+        public async Task<T> GetByIdAsync(Guid id) =>
+            await _dbCollection.Find(Builders<T>.Filter.Eq(p => p.Id, id)).FirstOrDefaultAsync();
+
+
+        public async Task<T> UpdateAsync(T entity) =>
+            await _dbCollection.FindOneAndReplaceAsync<T>(Builders<T>.Filter.Eq(c => c.Id, entity.Id), entity);
     }
 }

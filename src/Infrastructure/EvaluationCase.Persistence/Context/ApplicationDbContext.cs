@@ -1,31 +1,28 @@
-﻿using DnsClient.Internal;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
-using MongoDB.Driver;
-using EvaluationCase.Domain.Entities;
+﻿using EvaluationCase.Application.Interfaces.Repositories;
 using EvaluationCase.Persistence.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Runtime;
-using System.Text;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 
 namespace EvaluationCase.Persistence.Context
 {
-    public class ApplicationDbContext
+    public class ApplicationDbContext : IMongoDBContext
     {
-        public IMongoCollection<Campaign> Campaigns { get; set; }
-        public IMongoCollection<Product> Products { get; set; }
-        public IMongoCollection<Basket> Baskets { get; set; }
+        private IMongoDatabase _db { get; set; }
+        private MongoClient _mongoClient { get; set; }
 
-        public ApplicationDbContext(IOptions<DatabaseSetting> databaseSettings)
+        IMongoDatabase IMongoDBContext._db { get { return _db; } }
+
+        MongoClient IMongoDBContext._mongoClient { get { return _mongoClient; } }
+
+        public ApplicationDbContext(IOptions<DatabaseSetting> configuration)
         {
-            var client = new MongoClient(databaseSettings.Value.ConnectionString);
-            var database = client.GetDatabase(databaseSettings.Value.DatabaseName);
+            _mongoClient = new MongoClient(configuration.Value.ConnectionString);
+            _db = _mongoClient.GetDatabase(configuration.Value.DatabaseName);
+        }
 
-            Products = database.GetCollection<Product>("products");
-            Campaigns = database.GetCollection<Campaign>("campaigns");
-            Baskets = database.GetCollection<Basket>("baskets");
+        public IMongoCollection<T> GetCollection<T>(string name)
+        {
+            return _db.GetCollection<T>(name);
         }
     }
 }

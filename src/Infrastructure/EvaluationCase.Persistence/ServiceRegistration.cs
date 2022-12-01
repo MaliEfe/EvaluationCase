@@ -18,13 +18,15 @@ namespace EvaluationCase.Persistence
     {
         public static void AddPersistenceRegistration(this IServiceCollection services)
         {
-            services.AddScoped<ApplicationDbContext>();
-
+            //services.AddScoped<ApplicationDbContext>();
+            services.AddSingleton<IMongoDBContext, ApplicationDbContext>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICampaignRepository, CampaignRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<CampaignEvaluateService>();
             services.AddScoped<ICacheStore, RedisCacheStore>();
+            services.AddScoped<IMongoDbSettings, DatabaseSetting>();
+
 
         }
         public static void AddRedis(this IServiceCollection services)

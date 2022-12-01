@@ -31,9 +31,11 @@ namespace EvaluationCase.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<DatabaseSetting>(Configuration.GetSection(nameof(DatabaseSetting)));
+            services.AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvider.GetRequiredService<IOptions<DatabaseSetting>>().Value);
+
+            services.AddPersistenceRegistration();
             services.AddApplicationRegistration();
             services.AddRedis();
-            services.AddPersistenceRegistration();
             services.AddSwaggerGen();
             services.AddControllers();
         }

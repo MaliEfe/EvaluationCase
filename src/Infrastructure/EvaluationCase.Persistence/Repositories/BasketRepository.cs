@@ -9,32 +9,10 @@ using System.Threading.Tasks;
 
 namespace EvaluationCase.Persistence.Repositories
 {
-    public class BasketRepository : IBasketRepository
+    public class BasketRepository : GenericRepository<Basket>, IBasketRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-
-        public BasketRepository(ApplicationDbContext dbContext)
+        public BasketRepository(IMongoDBContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
-        }
-
-        public async Task<Basket> CreateAsync(Basket basket)
-        {
-            basket.CreateDate = DateTime.UtcNow;
-            await _dbContext.Baskets.InsertOneAsync(basket);
-
-            return basket;
-        }
-
-        public async Task<List<Basket>> GetAllAsync() =>
-            await _dbContext.Baskets.Find(Builders<Basket>.Filter.Empty).ToListAsync();
-
-        public async Task<Basket> GetByIdAsync(Guid id) =>
-            await _dbContext.Baskets.Find(Builders<Basket>.Filter.Eq(p => p.Id, id)).FirstOrDefaultAsync();
-
-        public async Task<Basket> UpdateAsync(Basket entity)
-        {
-            return await _dbContext.Baskets.FindOneAndReplaceAsync<Basket>(Builders<Basket>.Filter.Eq(c => c.Id, entity.Id), entity);
         }
     }
 }
