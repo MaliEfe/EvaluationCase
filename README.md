@@ -1,4 +1,4 @@
-# HBCampaignCase
+# EvaluationCase
 
 .Net 6 frameworku ve .Net Core Onion Architecture mimarisi üzerine CQRS patterni kullanılarak geliştirilmiştir. 
 Bu şekilde command ve queries sorguları birbirinden ayrı handler edilmiştir.  Handler edilen sınıflar arasındaki iletişimi, 
@@ -24,7 +24,7 @@ Teknoloji Başlıkları
 12.	Unit Test
 
 ![hb drawio (1)](https://user-images.githubusercontent.com/57442029/203716688-93a91e58-596e-48ca-850d-e82fcd2f88f8.png)
-![image](https://user-images.githubusercontent.com/57442029/203683868-44d4f1c4-b3f5-4a9f-aa11-3c5f2bcc53ce.png)
+![image](https://user-images.githubusercontent.com/57442029/203772302-f5a5055a-3c74-46f3-b73d-b54fe9e12e50.png)
 
 DB de 3 adet Products-Campaigns-Baskets table oluşturulmuştur. Kampanya hesaplama senaryosu şu şekilde işlemektedir.
 1.	Product ep sine post atılarak ürünler eklenir. Her  bir ürün guid id ile products tablosuna kaydedilir.	
@@ -32,4 +32,4 @@ DB de 3 adet Products-Campaigns-Baskets table oluşturulmuştur. Kampanya hesapl
 3.	Kaydedilen ürünler Basket post ep si ile ürün guid id ve quantity bilgisi ile birlikte sepete eklenir. Aynı şekilde sepet de guid id ile basket tablosuna kaydedilir.
 4.	Sepete ürünler eklendikten sonra kampanya hesaplama adımına geçilir. Campaign controller da campaign-evaluate ep sine basket id si gönderilerek ilgili sepetin içerisindeki ürünlere en uygun kampanya uygulanır ve geri döndürülür.
 
-Test payload ları HBCampaignCase.Test/Payloads klasörü altında bulunabilir.
+Test payload ları EvaluationCase.Test/Payloads klasörü altında bulunabilir.
